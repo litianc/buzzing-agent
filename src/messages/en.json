@@ -1,0 +1,49 @@
+{
+  "common": {
+    "siteName": "Buzzing",
+    "tagline": "Browse global trending content",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "loadMore": "Load more",
+    "noMore": "No more content"
+  },
+  "navigation": {
+    "home": "Home",
+    "hackerNews": "Hacker News",
+    "reddit": "Reddit",
+    "productHunt": "Product Hunt",
+    "watcha": "Watcha",
+    "rssSubscribe": "RSS Feed"
+  },
+  "home": {
+    "heroTitle": "Browse global trending content",
+    "heroDescription": "Curated discussions from Hacker News, Reddit, Product Hunt and more. Auto-translated for quick reading, with direct links to original content.",
+    "hotContent": "Trending",
+    "subscribeRss": "Subscribe RSS",
+    "noContent": "No content yet",
+    "fetchingData": "Fetching data...",
+    "triggerFetch": "Trigger fetch manually"
+  },
+  "post": {
+    "by": "by",
+    "points": "points",
+    "viewOriginal": "View original",
+    "loadMore": "Load more",
+    "loading": "Loading..."
+  },
+  "source": {
+    "hotPosts": "Trending",
+    "noContent": "No content yet",
+    "fetchingData": "Fetching data..."
+  },
+  "footer": {
+    "tagline": "Browse global trending content",
+    "github": "GitHub"
+  },
+  "time": {
+    "justNow": "just now",
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago"
+  }
+}

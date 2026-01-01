@@ -1,0 +1,49 @@
+{
+  "common": {
+    "siteName": "Buzzing",
+    "tagline": "用中文浏览全球热门内容",
+    "loading": "加载中...",
+    "error": "出错了",
+    "loadMore": "加载更多",
+    "noMore": "没有更多了"
+  },
+  "navigation": {
+    "home": "首页",
+    "hackerNews": "Hacker News",
+    "reddit": "Reddit",
+    "productHunt": "Product Hunt",
+    "watcha": "观猹",
+    "rssSubscribe": "RSS 订阅"
+  },
+  "home": {
+    "heroTitle": "用中文浏览全球热门内容",
+    "heroDescription": "汇聚 Hacker News、Reddit、Product Hunt 等平台的热门讨论，自动翻译，母语快速导读，感兴趣再进原文深度阅读。",
+    "hotContent": "热门内容",
+    "subscribeRss": "订阅 RSS",
+    "noContent": "暂无内容",
+    "fetchingData": "数据正在抓取中...",
+    "triggerFetch": "手动触发抓取"
+  },
+  "post": {
+    "by": "作者",
+    "points": "分",
+    "viewOriginal": "查看原文",
+    "loadMore": "加载更多",
+    "loading": "加载中..."
+  },
+  "source": {
+    "hotPosts": "热门内容",
+    "noContent": "暂无内容",
+    "fetchingData": "数据正在抓取中..."
+  },
+  "footer": {
+    "tagline": "用中文浏览全球热门内容",
+    "github": "GitHub"
+  },
+  "time": {
+    "justNow": "刚刚",
+    "minutesAgo": "{count}分钟前",
+    "hoursAgo": "{count}小时前",
+    "daysAgo": "{count}天前"
+  }
+}
