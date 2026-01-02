@@ -32,7 +32,9 @@
     "subscribeRss": "订阅 RSS",
     "noContent": "暂无内容",
     "fetchingData": "数据正在抓取中...",
-    "triggerFetch": "手动触发抓取"
+    "triggerFetch": "手动触发抓取",
+    "viewAll": "查看全部",
+    "showMore": "显示更多"
   },
   "post": {
     "by": "作者",

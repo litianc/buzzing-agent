@@ -21,8 +21,6 @@ export function Header() {
 
   const navItems: NavItem[] = [
     { href: '/hn', label: t('hackerNews') },
-    { href: '/showhn', label: t('showhn') },
-    { href: '/askhn', label: t('askhn') },
     { href: '/lobsters', label: t('lobsters') },
     { href: '/arstechnica', label: t('arstechnica') },
     { href: '/guardian', label: t('guardian') },
@@ -31,6 +29,8 @@ export function Header() {
     { href: '/devto', label: t('devto') },
     { href: '/ph', label: t('productHunt') },
     { href: '/watcha', label: t('watcha') },
+    { href: '/showhn', label: t('showhn') },
+    { href: '/askhn', label: t('askhn') },
   ];
 
   // Priority+ navigation state

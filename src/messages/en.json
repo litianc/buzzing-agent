@@ -32,7 +32,9 @@
     "subscribeRss": "Subscribe RSS",
     "noContent": "No content yet",
     "fetchingData": "Fetching data...",
-    "triggerFetch": "Trigger fetch manually"
+    "triggerFetch": "Trigger fetch manually",
+    "viewAll": "View all",
+    "showMore": "Show more"
   },
   "post": {
     "by": "by",

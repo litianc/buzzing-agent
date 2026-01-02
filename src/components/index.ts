@@ -8,3 +8,6 @@ export { LocaleSwitcher } from './layout/LocaleSwitcher';
 export { PostCard } from './post/PostCard';
 export { PostList } from './post/PostList';
 export { PostListWithLoadMore } from './post/PostListWithLoadMore';
+
+// Home
+export { SourceSection } from './home/SourceSection';

@@ -1,16 +1,38 @@
 // Buzzing Agent - Home Page (Server Component)
 
 import { db, posts, sources } from '@/db';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { PostListWithLoadMore } from '@/components';
+import { SourceSection } from '@/components';
 import type { PostCardData } from '@/types';
 import type { Locale } from '@/i18n/routing';
 
-const POSTS_PER_PAGE = 30;
+// Source order and titles (descriptions are in translation files)
+const sourceOrder = ['hn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn'] as const;
 
-async function getLatestPosts(limit = POSTS_PER_PAGE): Promise<PostCardData[]> {
+const sourceTitles: Record<string, string> = {
+  hn: 'Hacker News',
+  showhn: 'Show HN',
+  askhn: 'Ask HN',
+  lobsters: 'Lobsters',
+  arstechnica: 'Ars Technica',
+  guardian: 'The Guardian',
+  nature: 'Nature',
+  skynews: 'Sky News',
+  devto: 'Dev.to',
+  ph: 'Product Hunt',
+  watcha: '观猹',
+};
+
+// Fetch posts for a single source (up to 300 for client-side pagination)
+async function getSourcePosts(sourceName: string): Promise<PostCardData[]> {
   try {
+    const source = await db.query.sources.findFirst({
+      where: eq(sources.name, sourceName),
+    });
+
+    if (!source) return [];
+
     const result = await db
       .select({
         id: posts.id,
@@ -32,8 +54,9 @@ async function getLatestPosts(limit = POSTS_PER_PAGE): Promise<PostCardData[]> {
       })
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
-      .orderBy(desc(posts.score))
-      .limit(limit);
+      .where(eq(posts.sourceId, source.id))
+      .orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.publishedAt))
+      .limit(300);
 
     return result.map((row) => ({
       id: row.id,
@@ -56,18 +79,23 @@ async function getLatestPosts(limit = POSTS_PER_PAGE): Promise<PostCardData[]> {
       },
     }));
   } catch (error) {
-    console.error('Failed to fetch posts:', error);
+    console.error(`Failed to fetch posts for ${sourceName}:`, error);
     return [];
   }
 }
 
-async function getTotalPostCount(): Promise<number> {
-  try {
-    const result = await db.select({ id: posts.id }).from(posts);
-    return result.length;
-  } catch {
-    return 0;
-  }
+// Fetch all sources with their posts
+async function getAllSourcesWithPosts(): Promise<{ name: string; title: string; posts: PostCardData[] }[]> {
+  const results = await Promise.all(
+    sourceOrder.map(async (name) => ({
+      name,
+      title: sourceTitles[name] || name,
+      posts: await getSourcePosts(name),
+    }))
+  );
+
+  // Only return sources that have posts
+  return results.filter((source) => source.posts.length > 0);
 }
 
 type Props = {
@@ -79,9 +107,8 @@ export default async function HomePage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations('home');
-  const latestPosts = await getLatestPosts();
-  const totalCount = await getTotalPostCount();
-  const hasMore = totalCount > POSTS_PER_PAGE;
+  const tSource = await getTranslations('source');
+  const sourcesWithPosts = await getAllSourcesWithPosts();
 
   return (
     <div className="space-y-8">
@@ -95,38 +122,32 @@ export default async function HomePage({ params }: Props) {
         </p>
       </section>
 
-      {/* Post List */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {t('hotContent')}
-          </h2>
-          <a
-            href={`/${locale}/feed.xml`}
-            className="text-sm text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400"
-          >
-            {t('subscribeRss')}
-          </a>
+      {/* Source Sections */}
+      {sourcesWithPosts.length === 0 ? (
+        <div className="py-16 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">
+            {t('noContent')}
+          </p>
+          <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
+            {t('fetchingData')}
+          </p>
         </div>
-
-        {latestPosts.length === 0 ? (
-          <div className="py-16 text-center">
-            <p className="text-gray-500 dark:text-gray-400 text-lg">
-              {t('noContent')}
-            </p>
-            <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
-              {t('fetchingData')}
-            </p>
-          </div>
-        ) : (
-          <PostListWithLoadMore
-            initialPosts={latestPosts}
-            locale={locale as Locale}
-            hasMore={hasMore}
-            totalCount={totalCount}
-          />
-        )}
-      </section>
+      ) : (
+        <div className="space-y-8">
+          {sourcesWithPosts.map((source) => (
+            <SourceSection
+              key={source.name}
+              sourceName={source.name}
+              sourceTitle={source.title}
+              sourceDescription={tSource(source.name)}
+              posts={source.posts}
+              locale={locale as Locale}
+              moreLabel={t('showMore')}
+              viewAllLabel={t('viewAll')}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

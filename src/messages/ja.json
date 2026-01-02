@@ -32,7 +32,9 @@
     "subscribeRss": "RSS購読",
     "noContent": "コンテンツがありません",
     "fetchingData": "データを取得中...",
-    "triggerFetch": "手動で取得"
+    "triggerFetch": "手動で取得",
+    "viewAll": "すべて見る",
+    "showMore": "もっと見る"
   },
   "post": {
     "by": "投稿者",
