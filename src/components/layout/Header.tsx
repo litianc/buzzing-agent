@@ -37,18 +37,20 @@ export function Header() {
   const [visibleCount, setVisibleCount] = useState(navItems.length);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const navItemsRef = useRef<HTMLDivElement>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLDivElement>(null);
   const itemWidthsRef = useRef<number[]>([]);
 
-  // Measure item widths on mount
+  // Measure all item widths once on mount (from hidden container)
   useEffect(() => {
-    if (!navItemsRef.current) return;
-    const items = navItemsRef.current.querySelectorAll('[data-nav-item]');
+    if (!measureRef.current) return;
+    const items = measureRef.current.querySelectorAll('[data-nav-measure]');
     itemWidthsRef.current = Array.from(items).map(item => item.getBoundingClientRect().width);
-  }, [navItems]);
+    setMounted(true);
+  }, []);
 
   // Calculate visible items based on available space
   const calculateVisibleItems = useCallback(() => {
@@ -80,6 +82,8 @@ export function Header() {
 
   // ResizeObserver for responsive behavior
   useEffect(() => {
+    if (!mounted) return;
+
     calculateVisibleItems();
 
     const resizeObserver = new ResizeObserver(() => {
@@ -91,7 +95,7 @@ export function Header() {
     }
 
     return () => resizeObserver.disconnect();
-  }, [calculateVisibleItems]);
+  }, [calculateVisibleItems, mounted]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -109,6 +113,15 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
+      {/* Hidden container to measure all nav item widths */}
+      <div ref={measureRef} className="absolute invisible whitespace-nowrap" aria-hidden="true">
+        {navItems.map((item) => (
+          <span key={item.href} data-nav-measure className="px-3 py-2 text-sm">
+            {item.label}
+          </span>
+        ))}
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center gap-4">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 flex items-center gap-2 font-bold text-lg">
@@ -120,7 +133,7 @@ export function Header() {
 
         {/* Desktop Navigation - Priority+ */}
         <nav ref={navContainerRef} className="hidden md:flex flex-1 items-center min-w-0">
-          <div ref={navItemsRef} className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
             {visibleItems.map((item) => (
               <Link
                 key={item.href}
