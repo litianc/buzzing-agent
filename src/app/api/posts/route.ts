@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db, posts, sources } from '@/db';
-import { desc, eq, count, SQL, and } from 'drizzle-orm';
+import { desc, eq, count, SQL, and, sql } from 'drizzle-orm';
 import type { PostCardData, PaginatedResponse } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
       .where(whereClause)
-      .orderBy(desc(posts.publishedAt), desc(posts.score))
+      .orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.publishedAt))
       .limit(limit)
       .offset(offset);
 

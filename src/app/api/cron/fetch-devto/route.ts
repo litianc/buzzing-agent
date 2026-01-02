@@ -1,12 +1,12 @@
-// Buzzing Agent - Reddit Fetch Cron Endpoint
+// Buzzing Agent - Dev.to Fetch Cron Endpoint
 // Can be triggered by Vercel Cron or manually
 
 import { NextResponse } from 'next/server';
-import { fetchReddit } from '@/services/reddit';
+import { fetchDevto } from '@/services/devto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 120; // 120 seconds max (multiple subreddits)
+export const maxDuration = 60;
 
 export async function GET(request: Request) {
   // Optional: Verify cron secret for security
@@ -21,17 +21,16 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch Reddit posts
-    const fetchResult = await fetchReddit({
-      includePopular: true,
-      limit: 25,
-      minScore: 100,
+    // Fetch Dev.to articles
+    const fetchResult = await fetchDevto({
+      limit: 50,
+      minScore: 10,
       translate: true,
     });
 
     return NextResponse.json({
       success: true,
-      message: 'Reddit fetch completed',
+      message: 'Dev.to fetch completed',
       data: {
         fetched: fetchResult.count,
         newPosts: fetchResult.newPosts,
@@ -40,7 +39,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error('Reddit fetch cron failed:', error);
+    console.error('Dev.to fetch cron failed:', error);
 
     return NextResponse.json(
       {

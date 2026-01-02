@@ -10,14 +10,24 @@
   "navigation": {
     "home": "首页",
     "hackerNews": "Hacker News",
-    "reddit": "Reddit",
+    "showhn": "Show HN",
+    "askhn": "Ask HN",
+    "lobsters": "Lobsters",
+    "arstechnica": "Ars Technica",
+    "guardian": "卫报",
+    "nature": "Nature",
+    "skynews": "Sky News",
+    "devto": "Dev.to",
     "productHunt": "Product Hunt",
     "watcha": "观猹",
+    "more": "更多",
+    "showImages": "显示图片",
+    "hideImages": "隐藏图片",
     "rssSubscribe": "RSS 订阅"
   },
   "home": {
     "heroTitle": "用中文浏览全球热门内容",
-    "heroDescription": "汇聚 Hacker News、Reddit、Product Hunt 等平台的热门讨论，自动翻译，母语快速导读，感兴趣再进原文深度阅读。",
+    "heroDescription": "汇聚 Hacker News、Dev.to、Product Hunt 等平台的热门讨论，自动翻译，母语快速导读，感兴趣再进原文深度阅读。",
     "hotContent": "热门内容",
     "subscribeRss": "订阅 RSS",
     "noContent": "暂无内容",
@@ -34,7 +44,18 @@
   "source": {
     "hotPosts": "热门内容",
     "noContent": "暂无内容",
-    "fetchingData": "数据正在抓取中..."
+    "fetchingData": "数据正在抓取中...",
+    "hn": "来自 Y Combinator 的科技新闻与创业讨论",
+    "showhn": "开发者在 Hacker News 分享自己的项目",
+    "askhn": "Hacker News 上的问答与讨论",
+    "lobsters": "专注于计算机技术的链接聚合社区",
+    "arstechnica": "深度科技新闻与分析",
+    "guardian": "来自英国视角的全球新闻",
+    "nature": "顶级科学研究期刊",
+    "skynews": "来自英国和世界各地的突发新闻",
+    "devto": "开发者社区分享文章、教程和讨论",
+    "ph": "最新的产品与创业项目",
+    "watcha": "AI 产品评测社区，发现最新最热门的 AI 应用"
   },
   "footer": {
     "tagline": "用中文浏览全球热门内容",

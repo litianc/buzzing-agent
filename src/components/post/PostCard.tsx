@@ -1,6 +1,9 @@
+'use client';
+
 // Buzzing Agent - Post Card Component (Minimal Grid Style)
 
 import { formatScore, getFaviconUrl, formatDate } from '@/lib/utils';
+import { useImageMode } from '@/contexts/ImageModeContext';
 import type { PostCardData } from '@/types';
 import type { Locale } from '@/i18n/routing';
 import type { Locale as DbLocale } from '@/db/schema';
@@ -31,11 +34,13 @@ function getLocalizedTitle(post: PostCardData, locale: Locale): string {
 
 export function PostCard({ post, locale, rank }: PostCardProps) {
   const title = getLocalizedTitle(post, locale);
+  const { isWithImages } = useImageMode();
+  const showThumbnail = isWithImages && post.thumbnailUrl;
 
   return (
     <article className="group flex flex-col bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm transition-all overflow-hidden">
-      {/* Thumbnail */}
-      {post.thumbnailUrl && (
+      {/* Thumbnail - only render when image mode is on */}
+      {showThumbnail && (
         <a
           href={post.sourceUrl}
           target="_blank"
@@ -67,7 +72,7 @@ export function PostCard({ post, locale, rank }: PostCardProps) {
             rel="noopener noreferrer"
             className="hover:text-blue-600 dark:hover:text-blue-400"
           >
-            {rank !== undefined && !post.thumbnailUrl && (
+            {rank !== undefined && !showThumbnail && (
               <span className="inline-flex items-center justify-center w-5 h-5 mr-1.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-bold rounded">
                 {rank}
               </span>
@@ -91,26 +96,28 @@ export function PostCard({ post, locale, rank }: PostCardProps) {
             <span className="flex-shrink-0">{formatDate(post.publishedAt, locale)}</span>
           </span>
 
-          {/* Score - links to origin platform page */}
-          {post.originUrl ? (
-            <a
-              href={post.originUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-0.5 text-orange-600 dark:text-orange-400 font-medium flex-shrink-0 hover:text-orange-700 dark:hover:text-orange-300"
-            >
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clipRule="evenodd" />
-              </svg>
-              {formatScore(post.score)}
-            </a>
-          ) : (
-            <span className="inline-flex items-center gap-0.5 text-orange-600 dark:text-orange-400 font-medium flex-shrink-0">
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clipRule="evenodd" />
-              </svg>
-              {formatScore(post.score)}
-            </span>
+          {/* Score - only show when score > 0 (RSS sources have no scores) */}
+          {post.score > 0 && (
+            post.originUrl ? (
+              <a
+                href={post.originUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-0.5 text-orange-600 dark:text-orange-400 font-medium flex-shrink-0 hover:text-orange-700 dark:hover:text-orange-300"
+              >
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clipRule="evenodd" />
+                </svg>
+                {formatScore(post.score)}
+              </a>
+            ) : (
+              <span className="inline-flex items-center gap-0.5 text-orange-600 dark:text-orange-400 font-medium flex-shrink-0">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clipRule="evenodd" />
+                </svg>
+                {formatScore(post.score)}
+              </span>
+            )
           )}
         </div>
       </div>

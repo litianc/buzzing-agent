@@ -46,3 +46,10 @@ export function truncate(text: string, maxLength: number): string {
 export function getFaviconUrl(domain: string): string {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
 }
+
+// Truncate date to minute precision (set seconds and milliseconds to 0)
+export function truncateToMinute(date: Date | string | number): Date {
+  const d = date instanceof Date ? new Date(date) : new Date(date);
+  d.setSeconds(0, 0);
+  return d;
+}

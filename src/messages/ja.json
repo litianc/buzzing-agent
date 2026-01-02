@@ -10,14 +10,24 @@
   "navigation": {
     "home": "ホーム",
     "hackerNews": "Hacker News",
-    "reddit": "Reddit",
+    "showhn": "Show HN",
+    "askhn": "Ask HN",
+    "lobsters": "Lobsters",
+    "arstechnica": "Ars Technica",
+    "guardian": "The Guardian",
+    "nature": "Nature",
+    "skynews": "Sky News",
+    "devto": "Dev.to",
     "productHunt": "Product Hunt",
     "watcha": "観猹",
+    "more": "もっと",
+    "showImages": "画像を表示",
+    "hideImages": "画像を非表示",
     "rssSubscribe": "RSS購読"
   },
   "home": {
     "heroTitle": "世界のトレンドを日本語で",
-    "heroDescription": "Hacker News、Reddit、Product Huntなどの人気ディスカッションを自動翻訳。母語で素早く概要を把握し、興味があれば原文へ。",
+    "heroDescription": "Hacker News、Dev.to、Product Huntなどの人気ディスカッションを自動翻訳。母語で素早く概要を把握し、興味があれば原文へ。",
     "hotContent": "トレンド",
     "subscribeRss": "RSS購読",
     "noContent": "コンテンツがありません",
@@ -34,7 +44,18 @@
   "source": {
     "hotPosts": "トレンド",
     "noContent": "コンテンツがありません",
-    "fetchingData": "データを取得中..."
+    "fetchingData": "データを取得中...",
+    "hn": "Y Combinatorからのテックニュースとスタートアップの議論",
+    "showhn": "開発者がHacker Newsで自分のプロジェクトを共有",
+    "askhn": "Hacker Newsでの質問とディスカッション",
+    "lobsters": "コンピューティングに特化したリンク集約コミュニティ",
+    "arstechnica": "詳細なテクノロジーニュースと分析",
+    "guardian": "イギリスの視点からのグローバルニュース",
+    "nature": "一流の科学研究ジャーナル",
+    "skynews": "イギリスと世界中からの速報ニュース",
+    "devto": "記事、チュートリアル、ディスカッションを共有する開発者コミュニティ",
+    "ph": "最新のプロダクトとスタートアップ",
+    "watcha": "AIプロダクトレビューコミュニティ、最新の人気AIアプリを発見"
   },
   "footer": {
     "tagline": "世界のトレンドを日本語で",

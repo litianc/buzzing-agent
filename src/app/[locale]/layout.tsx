@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
 import { Header } from "@/components";
+import { ImageModeProvider } from '@/contexts/ImageModeContext';
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -55,20 +56,22 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale}>
       <body className="antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
         <NextIntlClientProvider messages={messages}>
-          <Header />
-          <main className="max-w-6xl mx-auto px-4 py-6">
-            {children}
-          </main>
-          <footer className="border-t border-gray-200 dark:border-gray-800 py-6 mt-12">
-            <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
-              <p>Buzzing Agent</p>
-              <p className="mt-2">
-                <a href={`/${locale}/feed.xml`} className="hover:text-gray-900 dark:hover:text-gray-100">RSS</a>
-                {' · '}
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-900 dark:hover:text-gray-100">GitHub</a>
-              </p>
-            </div>
-          </footer>
+          <ImageModeProvider>
+            <Header />
+            <main className="max-w-6xl mx-auto px-4 py-6">
+              {children}
+            </main>
+            <footer className="border-t border-gray-200 dark:border-gray-800 py-6 mt-12">
+              <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                <p>Buzzing Agent</p>
+                <p className="mt-2">
+                  <a href={`/${locale}/feed.xml`} className="hover:text-gray-900 dark:hover:text-gray-100">RSS</a>
+                  {' · '}
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-900 dark:hover:text-gray-100">GitHub</a>
+                </p>
+              </div>
+            </footer>
+          </ImageModeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

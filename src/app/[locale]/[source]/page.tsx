@@ -1,7 +1,7 @@
-// Buzzing Agent - Source Page (e.g., /zh/hn, /en/reddit)
+// Buzzing Agent - Source Page (e.g., /zh/hn, /en/ph)
 
 import { db, posts, sources } from '@/db';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { PostListWithLoadMore } from '@/components/post/PostListWithLoadMore';
@@ -11,27 +11,22 @@ import type { Locale } from '@/i18n/routing';
 const POSTS_PER_PAGE = 30;
 
 // Valid source names
-const validSources = ['hn', 'reddit', 'ph', 'watcha'] as const;
+const validSources = ['hn', 'showhn', 'askhn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha'] as const;
 type SourceName = typeof validSources[number];
 
-// Source display info
-const sourceInfo: Record<SourceName, { title: string; description: string }> = {
-  hn: {
-    title: 'Hacker News',
-    description: 'Tech news and startup discussions from Y Combinator',
-  },
-  reddit: {
-    title: 'Reddit',
-    description: 'Popular discussions from Reddit communities',
-  },
-  ph: {
-    title: 'Product Hunt',
-    description: 'The latest products and startups',
-  },
-  watcha: {
-    title: '观猹',
-    description: 'AI 产品评测社区，发现最新最热门的 AI 应用',
-  },
+// Source titles (descriptions are in translation files)
+const sourceTitles: Record<SourceName, string> = {
+  hn: 'Hacker News',
+  showhn: 'Show HN',
+  askhn: 'Ask HN',
+  lobsters: 'Lobsters',
+  arstechnica: 'Ars Technica',
+  guardian: 'The Guardian',
+  nature: 'Nature',
+  skynews: 'Sky News',
+  devto: 'Dev.to',
+  ph: 'Product Hunt',
+  watcha: '观猹',
 };
 
 async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promise<PostCardData[]> {
@@ -67,7 +62,7 @@ async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promi
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
       .where(eq(posts.sourceId, source.id))
-      .orderBy(desc(posts.publishedAt), desc(posts.score))
+      .orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.publishedAt))
       .limit(limit);
 
     return result.map((row) => ({
@@ -130,7 +125,7 @@ export default async function SourcePage({ params }: Props) {
 
   const sourceName = source as SourceName;
   const t = await getTranslations('source');
-  const info = sourceInfo[sourceName];
+  const title = sourceTitles[sourceName];
 
   const sourcePosts = await getSourcePosts(sourceName);
   const totalCount = await getSourcePostCount(sourceName);
@@ -141,10 +136,10 @@ export default async function SourcePage({ params }: Props) {
       {/* Source Header */}
       <section className="text-center py-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-          {info.title}
+          {title}
         </h1>
         <p className="mt-3 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          {info.description}
+          {t(sourceName)}
         </p>
       </section>
 

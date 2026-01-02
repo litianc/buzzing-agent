@@ -4,6 +4,7 @@
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
 import { translatePostToAllLocales } from './translate';
+import { truncateToMinute } from '@/lib/utils';
 
 const HN_API_BASE = 'https://hacker-news.firebaseio.com/v0';
 const DEFAULT_MAX_POSTS = 300;
@@ -212,7 +213,7 @@ export async function fetchHackerNews(options: {
         authorUrl: item.by ? `https://news.ycombinator.com/user?id=${item.by}` : null,
         score: item.score || 0,
         tags: detectTags(item.title!),
-        publishedAt: new Date(item.time * 1000),
+        publishedAt: truncateToMinute(item.time * 1000),
       };
 
       // Translate to all locales if enabled

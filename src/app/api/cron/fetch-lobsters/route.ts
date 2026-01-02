@@ -1,12 +1,12 @@
-// Buzzing Clone - HN Fetch Cron Endpoint
+// Buzzing Agent - Lobsters Fetch Cron Endpoint
 // Can be triggered by Vercel Cron or manually
 
 import { NextResponse } from 'next/server';
-import { fetchHackerNews, translatePendingPosts } from '@/services/hn';
+import { fetchLobsters } from '@/services/lobsters';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60; // 60 seconds max
+export const maxDuration = 60;
 
 export async function GET(request: Request) {
   // Optional: Verify cron secret for security
@@ -21,30 +21,26 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch new HN posts
-    const fetchResult = await fetchHackerNews({
-      type: 'top',
-      limit: 50,
-      minScore: 100,
+    // Fetch Lobsters stories
+    const fetchResult = await fetchLobsters({
+      type: 'hottest',
+      limit: 25,
+      minScore: 5,
       translate: true,
     });
 
-    // Translate any remaining pending posts
-    const translatedCount = await translatePendingPosts(20);
-
     return NextResponse.json({
       success: true,
-      message: 'HN fetch completed',
+      message: 'Lobsters fetch completed',
       data: {
         fetched: fetchResult.count,
         newPosts: fetchResult.newPosts,
         deleted: fetchResult.deleted,
-        translated: translatedCount,
         duration: fetchResult.duration,
       },
     });
   } catch (error) {
-    console.error('HN fetch cron failed:', error);
+    console.error('Lobsters fetch cron failed:', error);
 
     return NextResponse.json(
       {
