@@ -61,7 +61,8 @@ export async function fetchAskHN(options: { limit?: number; minScore?: number; t
       const externalId = String(item.id);
       const existing = await db.query.posts.findFirst({ where: and(eq(posts.sourceId, source.id), eq(posts.externalId, externalId)) });
       if (existing) {
-        if (item.score && Math.abs((existing.score || 0) - item.score) > 10) {
+        // Update score only if increased by more than 30
+        if (item.score && item.score - (existing.score || 0) > 30) {
           await db.update(posts).set({ score: item.score, updatedAt: new Date() }).where(eq(posts.id, existing.id));
         }
         continue;

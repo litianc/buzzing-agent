@@ -236,9 +236,10 @@ export async function fetchWatcha(options: {
       });
 
       if (existing) {
-        // Update score if changed significantly
+        // Update score only if increased by more than 20
         const currentScore = Number.isFinite(item.stats?.hot_score) ? Math.round(item.stats.hot_score) : 0;
-        if (Math.abs((existing.score || 0) - currentScore) > 5) {
+        const previousScore = existing.score || 0;
+        if (currentScore - previousScore > 20) {
           await db.update(posts)
             .set({ score: currentScore, updatedAt: new Date() })
             .where(eq(posts.id, existing.id));

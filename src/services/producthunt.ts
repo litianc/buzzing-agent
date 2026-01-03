@@ -340,8 +340,8 @@ export async function fetchProductHunt(options: {
       });
 
       if (existing) {
-        // Update votes if changed
-        if (Math.abs((existing.score || 0) - item.votesCount) > 10) {
+        // Update votes only if increased by more than 30
+        if (item.votesCount - (existing.score || 0) > 30) {
           await db.update(posts)
             .set({ score: item.votesCount, updatedAt: new Date() })
             .where(eq(posts.id, existing.id));

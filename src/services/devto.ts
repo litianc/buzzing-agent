@@ -128,8 +128,8 @@ export async function fetchDevto(options: {
       });
 
       if (existing) {
-        // Update score if changed significantly
-        if (Math.abs((existing.score || 0) - article.public_reactions_count) > 5) {
+        // Update score only if increased by more than 20
+        if (article.public_reactions_count - (existing.score || 0) > 20) {
           await db.update(posts)
             .set({ score: article.public_reactions_count, updatedAt: new Date() })
             .where(eq(posts.id, existing.id));

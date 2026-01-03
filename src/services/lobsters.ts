@@ -141,8 +141,8 @@ export async function fetchLobsters(options: {
       });
 
       if (existing) {
-        // Update score if changed
-        if (Math.abs((existing.score || 0) - story.score) > 3) {
+        // Update score only if increased by more than 10
+        if (story.score - (existing.score || 0) > 10) {
           await db.update(posts)
             .set({ score: story.score, updatedAt: new Date() })
             .where(eq(posts.id, existing.id));
