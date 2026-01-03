@@ -1,8 +1,8 @@
 module.exports = {
   apps: [{
     name: 'buzzing-agent',
-    script: 'npm',
-    args: 'start -- -p 4000',
+    script: 'node_modules/.bin/next',
+    args: 'start -p 4000',
     cwd: '/root/buzzing-agent',
     env: {
       NODE_ENV: 'production'
