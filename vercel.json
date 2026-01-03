@@ -1,12 +1,5 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron/fetch-ph",
-      "schedule": "0 */4 * * *"
-    },
-    {
-      "path": "/api/cron/fetch-watcha",
-      "schedule": "0 */4 * * *"
-    }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["hnd1"],
+  "installCommand": "npm install"
 }
