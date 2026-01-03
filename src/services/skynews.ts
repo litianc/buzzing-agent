@@ -71,7 +71,8 @@ export async function fetchSkyNews(options: { limit?: number; translate?: boolea
 
     // Combine and deduplicate items by link
     const seenLinks = new Set<string>();
-    const allItems: typeof feedResults[0]['items'] = [];
+    type FeedItem = { enclosure?: { url?: string } } & Parser.Item;
+    const allItems: FeedItem[] = [];
     for (const feed of feedResults) {
       for (const item of feed.items) {
         if (item.link && !seenLinks.has(item.link)) {

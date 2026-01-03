@@ -48,7 +48,7 @@ export function PostCard({ post, locale, rank }: PostCardProps) {
           className="relative block aspect-video overflow-hidden bg-gray-100 dark:bg-gray-800"
         >
           <img
-            src={post.thumbnailUrl}
+            src={post.thumbnailUrl!}
             alt=""
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"

@@ -131,7 +131,7 @@ function extractProductsFromNextData(data: unknown): PHProduct[] {
           tagline: String(record.tagline),
           url: record.url ? String(record.url) : `${PH_BASE_URL}/posts/${slugValue}`,
           websiteUrl: record.website ? String(record.website) : undefined,
-          thumbnailUrl: record.thumbnail?.url ? String(record.thumbnail.url) : undefined,
+          thumbnailUrl: (record.thumbnail as Record<string, unknown>)?.url ? String((record.thumbnail as Record<string, unknown>).url) : undefined,
           votesCount: Number(record.votesCount || record.votes_count || 0),
           commentsCount: Number(record.commentsCount || record.comments_count || 0),
           createdAt: record.createdAt ? new Date(String(record.createdAt)) : new Date(),

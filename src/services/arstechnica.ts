@@ -147,7 +147,7 @@ export async function fetchArsTechnica(options: {
         sourceUrl: item.link,
         originUrl: item.link,
         sourceDomain: extractDomain(item.link),
-        thumbnailUrl: extractThumbnailUrl(item as Record<string, unknown>),
+        thumbnailUrl: extractThumbnailUrl(item as unknown as Record<string, unknown>),
         author: (item['dc:creator'] || item.creator || '').trim() || null,
         score: 0, // RSS doesn't have scores
         tags,
