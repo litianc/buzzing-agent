@@ -11,6 +11,7 @@ interface ImageModeContextType {
   imageMode: ImageMode;
   toggleImageMode: () => void;
   isWithImages: boolean;
+  mounted: boolean;
 }
 
 const ImageModeContext = createContext<ImageModeContextType | undefined>(undefined);
@@ -19,7 +20,7 @@ const STORAGE_KEY = 'buzzing-image-mode';
 const MOBILE_BREAKPOINT = 768;
 
 function getDefaultMode(): ImageMode {
-  if (typeof window === 'undefined') return 'with-images';
+  if (typeof window === 'undefined') return 'without-images';
 
   // Check localStorage first
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -32,7 +33,8 @@ function getDefaultMode(): ImageMode {
 }
 
 export function ImageModeProvider({ children }: { children: ReactNode }) {
-  const [imageMode, setImageMode] = useState<ImageMode>('with-images');
+  // Default to 'without-images' to avoid flash on mobile (SSR-safe)
+  const [imageMode, setImageMode] = useState<ImageMode>('without-images');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -55,6 +57,7 @@ export function ImageModeProvider({ children }: { children: ReactNode }) {
       imageMode,
       toggleImageMode,
       isWithImages: imageMode === 'with-images',
+      mounted,
     }}>
       {children}
     </ImageModeContext.Provider>
