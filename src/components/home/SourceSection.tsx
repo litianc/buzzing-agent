@@ -18,8 +18,8 @@ interface SourceSectionProps {
   viewAllLabel: string;
 }
 
-// Responsive: 2 rows × columns (1 col mobile, 2 col tablet, 3 col desktop)
-const ROWS_INITIAL = 2;
+// Responsive: 3 rows × columns (1 col mobile, 2 col tablet, 3 col desktop)
+const ROWS_INITIAL = 3;
 const MULTIPLIER = 5;
 const MAX_POSTS = 300;
 
