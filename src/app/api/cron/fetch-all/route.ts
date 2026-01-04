@@ -7,7 +7,7 @@ import { fetchShowHN } from '@/services/showhn';
 import { fetchAskHN } from '@/services/askhn';
 import { fetchLobsters } from '@/services/lobsters';
 import { fetchProductHunt } from '@/services/producthunt';
-import { fetchDevTo } from '@/services/devto';
+import { fetchDevto } from '@/services/devto';
 import { fetchWatcha } from '@/services/watcha';
 import { fetchGuardian } from '@/services/guardian';
 import { fetchNature } from '@/services/nature';
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     { name: 'askhn', fn: () => fetchAskHN({ limit: 30, minScore: 50, translate: true }) },
     { name: 'lobsters', fn: () => fetchLobsters({ type: 'hottest', limit: 50, minScore: 5, translate: true }) },
     { name: 'ph', fn: () => fetchProductHunt({ daysBack: 3, minVotes: 50, limit: 50, translate: true }) },
-    { name: 'devto', fn: () => fetchDevTo({ limit: 30, minReactions: 20, translate: true }) },
+    { name: 'devto', fn: () => fetchDevto({ limit: 30, minReactions: 20, translate: true }) },
     { name: 'watcha', fn: () => fetchWatcha({ limit: 30, translate: true }) },
     { name: 'guardian', fn: () => fetchGuardian({ limit: 20, translate: true }) },
     { name: 'nature', fn: () => fetchNature({ limit: 20, translate: true }) },
