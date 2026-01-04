@@ -19,5 +19,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ~/buzzing-agent
-            git checkout package-lock.json
+            git fetch origin main
+            git reset --hard origin/main
             ./deploy.sh
