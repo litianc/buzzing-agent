@@ -114,7 +114,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
       {/* Hidden container to measure all nav item widths */}
-      <div ref={measureRef} className="absolute invisible whitespace-nowrap" aria-hidden="true">
+      <div ref={measureRef} className="absolute invisible whitespace-nowrap overflow-hidden w-0 h-0" aria-hidden="true">
         {navItems.map((item) => (
           <span key={item.href} data-nav-measure className="px-3 py-2 text-sm">
             {item.label}
