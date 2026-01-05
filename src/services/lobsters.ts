@@ -3,7 +3,6 @@
 
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
-import { translatePostToAllLocales } from './translate';
 import { truncateToMinute } from '@/lib/utils';
 
 const LOBSTERS_API_BASE = 'https://lobste.rs';
@@ -92,10 +91,9 @@ export async function fetchLobsters(options: {
   type?: 'hottest' | 'newest';
   limit?: number;
   minScore?: number;
-  translate?: boolean;
 } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
-  const { type = 'hottest', limit = 50, minScore = 5, translate = true } = options;
+  const { type = 'hottest', limit = 50, minScore = 5 } = options;
 
   try {
     // Get or create Lobsters source
@@ -168,23 +166,8 @@ export async function fetchLobsters(options: {
         score: story.score,
         tags: story.tags || [],
         publishedAt: truncateToMinute(story.created_at),
+        isTranslated: false,
       };
-
-      // Translate if enabled
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({
-            titleOriginal: postData.titleOriginal!,
-            summaryOriginal: postData.summaryOriginal,
-            originalLang: 'en',
-          });
-          postData.translations = translations;
-          postData.isTranslated = true;
-          postData.translatedAt = new Date();
-        } catch (error) {
-          console.error(`Failed to translate: ${postData.titleOriginal}`, error);
-        }
-      }
 
       // Insert new post
       await db.insert(posts).values(postData);

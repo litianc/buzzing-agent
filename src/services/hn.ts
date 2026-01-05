@@ -116,10 +116,9 @@ export async function fetchHackerNews(options: {
   type?: 'top' | 'new' | 'best';
   limit?: number;
   minScore?: number;
-  translate?: boolean;
 } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
-  const { type = 'top', limit = 100, minScore = 100, translate = true } = options;
+  const { type = 'top', limit = 100, minScore = 100 } = options;
 
   try {
     // Get or create HN source
@@ -157,7 +156,7 @@ export async function fetchHackerNews(options: {
     storyIds = storyIds.slice(0, limit);
 
     // Fetch items in parallel (batched)
-    const batchSize = 10;
+    const batchSize = 20;
     const allItems: HNItem[] = [];
 
     for (let i = 0; i < storyIds.length; i += batchSize) {
@@ -214,24 +213,10 @@ export async function fetchHackerNews(options: {
         score: item.score || 0,
         tags: detectTags(item.title!),
         publishedAt: truncateToMinute(item.time * 1000),
+        isTranslated: false,
       };
 
-      // Translate to all locales if enabled
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({
-            titleOriginal: postData.titleOriginal!,
-            originalLang: 'en',
-          });
-          postData.translations = translations;
-          postData.isTranslated = true;
-          postData.translatedAt = new Date();
-        } catch (error) {
-          console.error(`Failed to translate: ${postData.titleOriginal}`, error);
-        }
-      }
-
-      // Insert new post
+      // Insert new post (translation will be done by translate-pending cron)
       await db.insert(posts).values(postData);
       newPostsCount++;
     }

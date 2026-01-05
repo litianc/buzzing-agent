@@ -9,7 +9,6 @@
 
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
-import { translatePostToAllLocales } from './translate';
 
 const WATCHA_API_BASE = 'https://watcha.cn/api/v2';
 const WATCHA_BASE_URL = 'https://watcha.cn';
@@ -159,13 +158,11 @@ async function cleanupOldPosts(sourceId: string, maxPosts: number): Promise<numb
 export async function fetchWatcha(options: {
   includeNew?: boolean;
   limit?: number;
-  translate?: boolean;
 } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
   const {
     includeNew = true,
     limit = 30,  // 热度榜前 30 名
-    translate = true,
   } = options;
 
   try {
@@ -286,23 +283,8 @@ export async function fetchWatcha(options: {
         tags: tags.slice(0, 4),
         thumbnailUrl: item.image_url || item.avatar_url || null,
         publishedAt: fetchedAt,
+        isTranslated: false,
       };
-
-      // Translate to all locales if enabled
-      // Watcha content is in Chinese, so we translate FROM Chinese to EN and JA
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({
-            titleOriginal: postData.titleOriginal!,
-            originalLang: 'zh',
-          });
-          postData.translations = translations;
-          postData.isTranslated = true;
-          postData.translatedAt = new Date();
-        } catch (error) {
-          console.error(`Failed to translate: ${postData.titleOriginal}`, error);
-        }
-      }
 
       // Insert new post
       await db.insert(posts).values(postData);

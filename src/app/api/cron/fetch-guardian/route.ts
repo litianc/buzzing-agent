@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const fetchResult = await fetchGuardian({ limit: 30, translate: true });
+    const fetchResult = await fetchGuardian({ limit: 30 });
 
     return NextResponse.json({
       success: true,

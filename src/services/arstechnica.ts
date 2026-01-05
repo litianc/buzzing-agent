@@ -3,7 +3,6 @@
 
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
-import { translatePostToAllLocales } from './translate';
 import { truncateToMinute } from '@/lib/utils';
 import Parser from 'rss-parser';
 
@@ -81,10 +80,9 @@ async function cleanupOldPosts(sourceId: string, maxPosts: number): Promise<numb
 // Main Ars Technica fetcher
 export async function fetchArsTechnica(options: {
   limit?: number;
-  translate?: boolean;
 } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
-  const { limit = 50, translate = true } = options;
+  const { limit = 50 } = options;
 
   try {
     // Get or create Ars Technica source
@@ -152,23 +150,8 @@ export async function fetchArsTechnica(options: {
         score: 0, // RSS doesn't have scores
         tags,
         publishedAt: truncateToMinute(item.pubDate || new Date()),
+        isTranslated: false,
       };
-
-      // Translate if enabled
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({
-            titleOriginal: postData.titleOriginal!,
-            summaryOriginal: postData.summaryOriginal,
-            originalLang: 'en',
-          });
-          postData.translations = translations;
-          postData.isTranslated = true;
-          postData.translatedAt = new Date();
-        } catch (error) {
-          console.error(`Failed to translate: ${postData.titleOriginal}`, error);
-        }
-      }
 
       // Insert new post
       await db.insert(posts).values(postData);

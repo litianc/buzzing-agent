@@ -21,12 +21,11 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch Lobsters stories
+    // Fetch Lobsters stories (translation is done separately by translate-pending cron)
     const fetchResult = await fetchLobsters({
       type: 'hottest',
       limit: 25,
       minScore: 5,
-      translate: true,
     });
 
     return NextResponse.json({

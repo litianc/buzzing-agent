@@ -21,11 +21,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch Watcha products (热度榜前 30 名)
+    // Fetch Watcha products (热度榜前 30 名, translation is done separately by translate-pending cron)
     const fetchResult = await fetchWatcha({
       includeNew: true,
       limit: 30,
-      translate: true,
     });
 
     return NextResponse.json({

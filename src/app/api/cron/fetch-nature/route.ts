@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   try {
-    const result = await fetchNature({ limit: 30, translate: true });
+    const result = await fetchNature({ limit: 30 });
     return NextResponse.json({ success: true, message: 'Nature fetch completed', data: result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown' }, { status: 500 });

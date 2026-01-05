@@ -21,10 +21,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch Product Hunt posts (RANKING = 当日热门)
+    // Fetch Product Hunt posts (RANKING = 当日热门, translation is done separately by translate-pending cron)
     const fetchResult = await fetchProductHunt({
       minVotes: 10,
-      translate: true,
     });
 
     return NextResponse.json({

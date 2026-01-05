@@ -18,7 +18,6 @@ export async function GET(request: Request) {
   try {
     const fetchResult = await fetchArsTechnica({
       limit: 30,
-      translate: true,
     });
 
     return NextResponse.json({

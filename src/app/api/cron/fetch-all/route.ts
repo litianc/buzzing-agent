@@ -37,19 +37,19 @@ export async function GET(request: Request) {
   const startTime = Date.now();
   const results: FetchResult[] = [];
 
-  // Define all fetch tasks
+  // Define all fetch tasks (translation is done separately by translate-pending cron)
   const fetchTasks = [
-    { name: 'hn', fn: () => fetchHackerNews({ type: 'top', limit: 50, minScore: 100, translate: true }) },
-    { name: 'showhn', fn: () => fetchShowHN({ limit: 30, minScore: 10, translate: true }) },
-    { name: 'askhn', fn: () => fetchAskHN({ limit: 30, minScore: 50, translate: true }) },
+    { name: 'hn', fn: () => fetchHackerNews({ type: 'top', limit: 50, minScore: 100 }) },
+    { name: 'showhn', fn: () => fetchShowHN({ limit: 30, minScore: 10 }) },
+    { name: 'askhn', fn: () => fetchAskHN({ limit: 30, minScore: 50 }) },
     { name: 'lobsters', fn: () => fetchLobsters({ type: 'hottest', limit: 50, minScore: 5 }) },
-    { name: 'ph', fn: () => fetchProductHunt({ minVotes: 50, translate: true }) },
-    { name: 'devto', fn: () => fetchDevto({ limit: 30, minScore: 20, translate: true }) },
-    { name: 'watcha', fn: () => fetchWatcha({ limit: 30, translate: true }) },
-    { name: 'guardian', fn: () => fetchGuardian({ limit: 20, translate: true }) },
-    { name: 'nature', fn: () => fetchNature({ limit: 20, translate: true }) },
-    { name: 'skynews', fn: () => fetchSkyNews({ limit: 20, translate: true }) },
-    { name: 'arstechnica', fn: () => fetchArsTechnica({ limit: 20, translate: true }) },
+    { name: 'ph', fn: () => fetchProductHunt({ minVotes: 50 }) },
+    { name: 'devto', fn: () => fetchDevto({ limit: 30, minScore: 20 }) },
+    { name: 'watcha', fn: () => fetchWatcha({ limit: 30 }) },
+    { name: 'guardian', fn: () => fetchGuardian({ limit: 20 }) },
+    { name: 'nature', fn: () => fetchNature({ limit: 20 }) },
+    { name: 'skynews', fn: () => fetchSkyNews({ limit: 20 }) },
+    { name: 'arstechnica', fn: () => fetchArsTechnica({ limit: 20 }) },
   ];
 
   // Execute all fetches in parallel

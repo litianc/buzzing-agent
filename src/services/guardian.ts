@@ -3,7 +3,6 @@
 
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
-import { translatePostToAllLocales } from './translate';
 import { truncateToMinute } from '@/lib/utils';
 
 const GUARDIAN_API_BASE = 'https://content.guardianapis.com';
@@ -66,10 +65,9 @@ async function cleanupOldPosts(sourceId: string, maxPosts: number): Promise<numb
 // Main Guardian fetcher
 export async function fetchGuardian(options: {
   limit?: number;
-  translate?: boolean;
 } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
-  const { limit = 30, translate = true } = options;
+  const { limit = 30 } = options;
 
   // Use environment variable or fallback to test key
   const apiKey = process.env.GUARDIAN_API_KEY || 'test';
@@ -138,23 +136,8 @@ export async function fetchGuardian(options: {
         score: 0,
         tags: [article.sectionName].filter(Boolean),
         publishedAt: truncateToMinute(article.webPublicationDate),
+        isTranslated: false,
       };
-
-      // Translate
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({
-            titleOriginal: postData.titleOriginal!,
-            summaryOriginal: postData.summaryOriginal,
-            originalLang: 'en',
-          });
-          postData.translations = translations;
-          postData.isTranslated = true;
-          postData.translatedAt = new Date();
-        } catch (error) {
-          console.error(`Failed to translate: ${postData.titleOriginal}`, error);
-        }
-      }
 
       await db.insert(posts).values(postData);
       newPostsCount++;

@@ -21,11 +21,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch Dev.to articles
+    // Fetch Dev.to articles (translation is done separately by translate-pending cron)
     const fetchResult = await fetchDevto({
       limit: 50,
       minScore: 10,
-      translate: true,
     });
 
     return NextResponse.json({

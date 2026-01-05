@@ -2,7 +2,7 @@
 // Can be triggered by Vercel Cron or manually
 
 import { NextResponse } from 'next/server';
-import { fetchHackerNews, translatePendingPosts } from '@/services/hn';
+import { fetchHackerNews } from '@/services/hn';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -21,16 +21,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Fetch new HN posts
+    // Fetch new HN posts (translation is done separately by translate-pending cron)
     const fetchResult = await fetchHackerNews({
       type: 'top',
       limit: 50,
       minScore: 100,
-      translate: true,
     });
-
-    // Translate any remaining pending posts
-    const translatedCount = await translatePendingPosts(20);
 
     return NextResponse.json({
       success: true,
@@ -39,7 +35,6 @@ export async function GET(request: Request) {
         fetched: fetchResult.count,
         newPosts: fetchResult.newPosts,
         deleted: fetchResult.deleted,
-        translated: translatedCount,
         duration: fetchResult.duration,
       },
     });

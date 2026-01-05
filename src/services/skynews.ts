@@ -2,7 +2,6 @@
 
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
-import { translatePostToAllLocales } from './translate';
 import { truncateToMinute } from '@/lib/utils';
 import Parser from 'rss-parser';
 
@@ -50,9 +49,9 @@ async function cleanupOldPosts(sourceId: string, maxPosts: number): Promise<numb
   return toDelete.length;
 }
 
-export async function fetchSkyNews(options: { limit?: number; translate?: boolean } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
+export async function fetchSkyNews(options: { limit?: number } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
-  const { limit = 30, translate = true } = options;
+  const { limit = 30 } = options;
 
   try {
     let source = await db.query.sources.findFirst({ where: eq(sources.name, 'skynews') });
@@ -105,14 +104,8 @@ export async function fetchSkyNews(options: { limit?: number; translate?: boolea
         thumbnailUrl: extractThumbnailUrl(item as Record<string, unknown>),
         score: 0, tags: [],
         publishedAt: truncateToMinute(item.pubDate || new Date()),
+        isTranslated: false,
       };
-
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({ titleOriginal: postData.titleOriginal!, summaryOriginal: postData.summaryOriginal, originalLang: 'en' });
-          postData.translations = translations; postData.isTranslated = true; postData.translatedAt = new Date();
-        } catch (e) { console.error(`Translation failed: ${postData.titleOriginal}`, e); }
-      }
 
       await db.insert(posts).values(postData);
       newPostsCount++;

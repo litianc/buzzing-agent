@@ -10,7 +10,6 @@
 
 import { db, posts, sources, fetchLogs, type NewPost } from '@/db';
 import { eq, and, desc, inArray } from 'drizzle-orm';
-import { translatePostToAllLocales } from './translate';
 import * as cheerio from 'cheerio';
 
 const PH_BASE_URL = 'https://www.producthunt.com';
@@ -288,10 +287,9 @@ async function cleanupOldPosts(sourceId: string, maxPosts: number): Promise<numb
 // Main Product Hunt fetcher
 export async function fetchProductHunt(options: {
   minVotes?: number;
-  translate?: boolean;
 } = {}): Promise<{ count: number; newPosts: number; deleted: number; duration: number }> {
   const startTime = Date.now();
-  const { minVotes = 10, translate = true } = options;
+  const { minVotes = 10 } = options;
 
   try {
     // Get or create PH source
@@ -377,23 +375,8 @@ export async function fetchProductHunt(options: {
         tags: item.topics.length > 0 ? item.topics.slice(0, 3) : ['Product'],
         thumbnailUrl: item.thumbnailUrl || null,
         publishedAt: fetchedAt,
+        isTranslated: false,
       };
-
-      // Translate to all locales if enabled
-      // PH content is in English, so we translate FROM English to ZH and JA
-      if (translate) {
-        try {
-          const translations = await translatePostToAllLocales({
-            titleOriginal: postData.titleOriginal!,
-            originalLang: 'en',
-          });
-          postData.translations = translations;
-          postData.isTranslated = true;
-          postData.translatedAt = new Date();
-        } catch (error) {
-          console.error(`Failed to translate: ${postData.titleOriginal}`, error);
-        }
-      }
 
       // Insert new post
       await db.insert(posts).values(postData);
