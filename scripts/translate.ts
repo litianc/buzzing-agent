@@ -7,7 +7,13 @@
  * Or: npm run script:translate
  */
 
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load .env from root directory (parent of app/)
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+// Also try current directory as fallback
+dotenv.config();
 import { db, posts } from '../src/db';
 import { eq, or, isNull, desc } from 'drizzle-orm';
 import { translatePostToAllLocales } from '../src/services/translate';

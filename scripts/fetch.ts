@@ -7,7 +7,13 @@
  * Or: npm run script:fetch
  */
 
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load .env from root directory (parent of app/)
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+// Also try current directory as fallback
+dotenv.config();
 import { fetchHackerNews } from '../src/services/hn';
 import { fetchShowHN } from '../src/services/showhn';
 import { fetchAskHN } from '../src/services/askhn';
