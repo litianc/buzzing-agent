@@ -10,15 +10,17 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load .env from root directory (parent of app/)
-dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
-// Also try current directory as fallback
+// Load .env BEFORE any other imports
+// Try current directory first, then parent directory
 dotenv.config();
-import { db, posts } from '../src/db';
-import { eq, or, isNull, desc } from 'drizzle-orm';
-import { translatePostToAllLocales } from '../src/services/translate';
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 async function main() {
+  // Dynamic imports to ensure env vars are loaded first
+  const { db, posts } = await import('../src/db');
+  const { eq, or, isNull, desc } = await import('drizzle-orm');
+  const { translatePostToAllLocales } = await import('../src/services/translate');
+
   const limit = parseInt(process.argv[2] || '50', 10);
   console.log(`🌐 Starting translation (limit: ${limit})...\n`);
   const startTime = Date.now();

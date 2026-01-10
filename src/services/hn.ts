@@ -207,6 +207,7 @@ export async function fetchHackerNews(options: {
         originalLang: 'en', // HN content is in English
         titleEn: item.title!, // 兼容旧字段
         sourceUrl,
+        originUrl: `https://news.ycombinator.com/item?id=${item.id}`,
         sourceDomain: extractDomain(sourceUrl),
         author: item.by || null,
         authorUrl: item.by ? `https://news.ycombinator.com/user?id=${item.by}` : null,

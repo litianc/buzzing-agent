@@ -10,21 +10,10 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load .env from root directory (parent of app/)
-dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
-// Also try current directory as fallback
+// Load .env BEFORE any other imports
+// Try current directory first, then parent directory
 dotenv.config();
-import { fetchHackerNews } from '../src/services/hn';
-import { fetchShowHN } from '../src/services/showhn';
-import { fetchAskHN } from '../src/services/askhn';
-import { fetchLobsters } from '../src/services/lobsters';
-import { fetchProductHunt } from '../src/services/producthunt';
-import { fetchDevto } from '../src/services/devto';
-import { fetchWatcha } from '../src/services/watcha';
-import { fetchGuardian } from '../src/services/guardian';
-import { fetchNature } from '../src/services/nature';
-import { fetchSkyNews } from '../src/services/skynews';
-import { fetchArsTechnica } from '../src/services/arstechnica';
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 interface FetchResult {
   source: string;
@@ -35,6 +24,18 @@ interface FetchResult {
 }
 
 async function main() {
+  // Dynamic imports to ensure env vars are loaded first
+  const { fetchHackerNews } = await import('../src/services/hn');
+  const { fetchShowHN } = await import('../src/services/showhn');
+  const { fetchAskHN } = await import('../src/services/askhn');
+  const { fetchLobsters } = await import('../src/services/lobsters');
+  const { fetchProductHunt } = await import('../src/services/producthunt');
+  const { fetchDevto } = await import('../src/services/devto');
+  const { fetchWatcha } = await import('../src/services/watcha');
+  const { fetchGuardian } = await import('../src/services/guardian');
+  const { fetchNature } = await import('../src/services/nature');
+  const { fetchSkyNews } = await import('../src/services/skynews');
+  const { fetchArsTechnica } = await import('../src/services/arstechnica');
   console.log('🚀 Starting fetch all sources...\n');
   const startTime = Date.now();
 
