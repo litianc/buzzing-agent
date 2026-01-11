@@ -11,11 +11,13 @@ export function FeedbackButton() {
     <div className="fixed bottom-6 right-6 z-50">
       {/* QR Code Popup */}
       {showQR && (
-        <div className="absolute bottom-14 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 border border-gray-200 dark:border-gray-700">
+        <div className="absolute bottom-14 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 border border-gray-200 dark:border-gray-700 w-[152px]">
           <img
             src="/feedback-qr.png"
             alt="Feedback QR Code"
-            className="w-32 h-32"
+            width={128}
+            height={128}
+            className="block"
           />
           <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
             微信扫码反馈
