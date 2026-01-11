@@ -3,6 +3,7 @@
 // Layout
 export { Header } from './layout/Header';
 export { LocaleSwitcher } from './layout/LocaleSwitcher';
+export { FeedbackButton } from './layout/FeedbackButton';
 
 // Post
 export { PostCard } from './post/PostCard';

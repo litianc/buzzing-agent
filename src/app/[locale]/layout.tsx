@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
-import { Header } from "@/components";
+import { Header, FeedbackButton } from "@/components";
 import { ImageModeProvider } from '@/contexts/ImageModeContext';
 import "../globals.css";
 
@@ -61,6 +61,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <main className="max-w-6xl mx-auto px-4 py-6">
               {children}
             </main>
+            <FeedbackButton />
             <footer className="border-t border-gray-200 dark:border-gray-800 py-6 mt-12">
               <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
                 <p>Buzzing Agent</p>
