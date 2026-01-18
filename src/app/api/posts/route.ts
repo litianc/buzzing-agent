@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
       .where(whereClause)
-      .orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.publishedAt))
+      .orderBy(sql`date(${posts.publishedAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.publishedAt))
       .limit(limit)
       .offset(offset);
 
