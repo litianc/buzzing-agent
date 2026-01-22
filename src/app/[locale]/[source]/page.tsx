@@ -14,6 +14,9 @@ const POSTS_PER_PAGE = 30;
 const validSources = ['hn', 'showhn', 'askhn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha'] as const;
 type SourceName = typeof validSources[number];
 
+// News sources don't have scores, sort by time only
+const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
+
 // Source titles (descriptions are in translation files)
 const sourceTitles: Record<SourceName, string> = {
   hn: 'Hacker News',
@@ -40,7 +43,9 @@ async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promi
       return [];
     }
 
-    const result = await db
+    const isNewsSource = (newsSources as readonly string[]).includes(sourceName);
+
+    const query = db
       .select({
         id: posts.id,
         titleOriginal: posts.titleOriginal,
@@ -61,9 +66,13 @@ async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promi
       })
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
-      .where(eq(posts.sourceId, source.id))
-      .orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt))
-      .limit(limit);
+      .where(eq(posts.sourceId, source.id));
+
+    // News sources: sort by time only (no scores)
+    // Community sources: group by date, then sort by score
+    const result = isNewsSource
+      ? await query.orderBy(desc(posts.createdAt)).limit(limit)
+      : await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit);
 
     return result.map((row) => ({
       id: row.id,

@@ -8,6 +8,9 @@ import type { PostCardData, PaginatedResponse } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
+// News sources don't have scores, sort by time only
+const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
@@ -38,8 +41,9 @@ export async function GET(request: NextRequest) {
 
     // Build and execute query
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    const isNewsSource = source && (newsSources as readonly string[]).includes(source);
 
-    const result = await db
+    const query = db
       .select({
         id: posts.id,
         titleOriginal: posts.titleOriginal,
@@ -60,10 +64,13 @@ export async function GET(request: NextRequest) {
       })
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
-      .where(whereClause)
-      .orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt))
-      .limit(limit)
-      .offset(offset);
+      .where(whereClause);
+
+    // News sources: sort by time only (no scores)
+    // Community sources or mixed: group by date, then sort by score
+    const result = isNewsSource
+      ? await query.orderBy(desc(posts.createdAt)).limit(limit).offset(offset)
+      : await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit).offset(offset);
 
     // Get total count with same conditions
     const countResult = await db

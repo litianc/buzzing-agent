@@ -10,6 +10,9 @@ import type { Locale } from '@/i18n/routing';
 // Source order and titles (descriptions are in translation files)
 const sourceOrder = ['hn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn'] as const;
 
+// News sources don't have scores, sort by time only
+const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
+
 const sourceTitles: Record<string, string> = {
   hn: 'Hacker News',
   showhn: 'Show HN',
@@ -33,7 +36,9 @@ async function getSourcePosts(sourceName: string): Promise<PostCardData[]> {
 
     if (!source) return [];
 
-    const result = await db
+    const isNewsSource = (newsSources as readonly string[]).includes(sourceName);
+
+    const query = db
       .select({
         id: posts.id,
         titleOriginal: posts.titleOriginal,
@@ -54,9 +59,13 @@ async function getSourcePosts(sourceName: string): Promise<PostCardData[]> {
       })
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
-      .where(eq(posts.sourceId, source.id))
-      .orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt))
-      .limit(300);
+      .where(eq(posts.sourceId, source.id));
+
+    // News sources: sort by time only (no scores)
+    // Community sources: group by date, then sort by score
+    const result = isNewsSource
+      ? await query.orderBy(desc(posts.createdAt)).limit(300)
+      : await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(300);
 
     return result.map((row) => ({
       id: row.id,
