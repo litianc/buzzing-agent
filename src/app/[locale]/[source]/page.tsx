@@ -62,7 +62,7 @@ async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promi
       .from(posts)
       .leftJoin(sources, eq(posts.sourceId, sources.id))
       .where(eq(posts.sourceId, source.id))
-      .orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.publishedAt))
+      .orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt))
       .limit(limit);
 
     return result.map((row) => ({
