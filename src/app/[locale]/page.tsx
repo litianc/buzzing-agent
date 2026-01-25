@@ -10,8 +10,11 @@ import type { Locale } from '@/i18n/routing';
 // Source order and titles (descriptions are in translation files)
 const sourceOrder = ['hn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn', 'baoyu'] as const;
 
-// News sources don't have scores, sort by time only
-const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica', 'baoyu'] as const;
+// News sources don't have scores, sort by crawl time
+const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
+
+// Blog sources don't have scores, sort by publish time
+const blogSources = ['baoyu'] as const;
 
 const sourceTitles: Record<string, string> = {
   hn: 'Hacker News',
@@ -38,6 +41,7 @@ async function getSourcePosts(sourceName: string): Promise<PostCardData[]> {
     if (!source) return [];
 
     const isNewsSource = (newsSources as readonly string[]).includes(sourceName);
+    const isBlogSource = (blogSources as readonly string[]).includes(sourceName);
 
     const query = db
       .select({
@@ -62,11 +66,17 @@ async function getSourcePosts(sourceName: string): Promise<PostCardData[]> {
       .leftJoin(sources, eq(posts.sourceId, sources.id))
       .where(eq(posts.sourceId, source.id));
 
-    // News sources: sort by time only (no scores)
-    // Community sources: group by date, then sort by score
-    const result = isNewsSource
-      ? await query.orderBy(desc(posts.createdAt)).limit(300)
-      : await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(300);
+    // Blog sources: sort by publish time (newest articles first)
+    // News sources: sort by crawl time (no scores)
+    // Community sources: group by crawl date, then sort by score
+    let result;
+    if (isBlogSource) {
+      result = await query.orderBy(desc(posts.publishedAt)).limit(300);
+    } else if (isNewsSource) {
+      result = await query.orderBy(desc(posts.createdAt)).limit(300);
+    } else {
+      result = await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(300);
+    }
 
     return result.map((row) => ({
       id: row.id,

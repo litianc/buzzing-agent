@@ -8,8 +8,11 @@ import type { PostCardData, PaginatedResponse } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
-// News sources don't have scores, sort by time only
+// News sources don't have scores, sort by crawl time
 const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
+
+// Blog sources don't have scores, sort by publish time
+const blogSources = ['baoyu'] as const;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -42,6 +45,7 @@ export async function GET(request: NextRequest) {
     // Build and execute query
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
     const isNewsSource = source && (newsSources as readonly string[]).includes(source);
+    const isBlogSource = source && (blogSources as readonly string[]).includes(source);
 
     const query = db
       .select({
@@ -66,11 +70,17 @@ export async function GET(request: NextRequest) {
       .leftJoin(sources, eq(posts.sourceId, sources.id))
       .where(whereClause);
 
-    // News sources: sort by time only (no scores)
-    // Community sources or mixed: group by date, then sort by score
-    const result = isNewsSource
-      ? await query.orderBy(desc(posts.createdAt)).limit(limit).offset(offset)
-      : await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit).offset(offset);
+    // Blog sources: sort by publish time (newest articles first)
+    // News sources: sort by crawl time (no scores)
+    // Community sources or mixed: group by crawl date, then sort by score
+    let result;
+    if (isBlogSource) {
+      result = await query.orderBy(desc(posts.publishedAt)).limit(limit).offset(offset);
+    } else if (isNewsSource) {
+      result = await query.orderBy(desc(posts.createdAt)).limit(limit).offset(offset);
+    } else {
+      result = await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit).offset(offset);
+    }
 
     // Get total count with same conditions
     const countResult = await db
