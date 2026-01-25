@@ -11,11 +11,11 @@ import type { Locale } from '@/i18n/routing';
 const POSTS_PER_PAGE = 30;
 
 // Valid source names
-const validSources = ['hn', 'showhn', 'askhn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha'] as const;
+const validSources = ['hn', 'showhn', 'askhn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'baoyu'] as const;
 type SourceName = typeof validSources[number];
 
 // News sources don't have scores, sort by time only
-const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
+const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica', 'baoyu'] as const;
 
 // Source titles (descriptions are in translation files)
 const sourceTitles: Record<SourceName, string> = {
@@ -30,6 +30,7 @@ const sourceTitles: Record<SourceName, string> = {
   devto: 'Dev.to',
   ph: 'Product Hunt',
   watcha: '观猹',
+  baoyu: '宝玉的分享',
 };
 
 async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promise<PostCardData[]> {

@@ -20,6 +20,7 @@
     "devto": "Dev.to",
     "productHunt": "Product Hunt",
     "watcha": "Watcha",
+    "baoyu": "Baoyu's Blog",
     "more": "More",
     "showImages": "Show images",
     "hideImages": "Hide images",
@@ -57,7 +58,8 @@
     "skynews": "Breaking news from the UK and around the world",
     "devto": "Developer community sharing articles, tutorials and discussions",
     "ph": "The latest products and startups",
-    "watcha": "AI product review community, discover the latest and hottest AI apps"
+    "watcha": "AI product review community, discover the latest and hottest AI apps",
+    "baoyu": "Baoyu's blog sharing insights on LLMs, Prompt Engineering, and software development"
   },
   "footer": {
     "tagline": "Browse global trending content",

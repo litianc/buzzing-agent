@@ -20,6 +20,7 @@
     "devto": "Dev.to",
     "productHunt": "Product Hunt",
     "watcha": "观猹",
+    "baoyu": "宝玉的分享",
     "more": "更多",
     "showImages": "显示图片",
     "hideImages": "隐藏图片",
@@ -57,7 +58,8 @@
     "skynews": "来自英国和世界各地的突发新闻",
     "devto": "开发者社区分享文章、教程和讨论",
     "ph": "最新的产品与创业项目",
-    "watcha": "AI 产品评测社区，发现最新最热门的 AI 应用"
+    "watcha": "AI 产品评测社区，发现最新最热门的 AI 应用",
+    "baoyu": "宝玉的博客，主要分享大语言模型、Prompt Engineering、软件工程等领域内容"
   },
   "footer": {
     "tagline": "用中文浏览全球热门内容",
