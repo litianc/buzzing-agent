@@ -9,7 +9,7 @@ git pull origin main
 
 echo "📦 Installing dependencies..."
 source ~/.nvm/nvm.sh
-nvm use 22
+nvm use 23 || nvm use --lts || nvm use node
 npm install
 
 echo "✅ Fetch server updated!"
