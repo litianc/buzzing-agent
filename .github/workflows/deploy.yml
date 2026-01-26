@@ -34,7 +34,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_2_HOST }}
           username: ${{ secrets.SERVER_2_USER }}
-          key: ${{ secrets.SERVER_2_SSH_KEY }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_2_PORT }}
           script: |
             cd ~/buzzing-agent
