@@ -82,7 +82,7 @@ async function getSourcePosts(sourceName: string, limit = POSTS_PER_PAGE): Promi
     } else if (isNewsSource) {
       result = await query.orderBy(desc(posts.createdAt)).limit(limit);
     } else {
-      result = await query.orderBy(sql`date(${posts.createdAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit);
+      result = await query.orderBy(sql`date(${posts.publishedAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit);
     }
 
     return result.map((row) => ({
