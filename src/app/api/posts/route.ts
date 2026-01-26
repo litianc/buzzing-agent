@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
     } else if (isNewsSource) {
       result = await query.orderBy(desc(posts.createdAt)).limit(limit).offset(offset);
     } else {
-      result = await query.orderBy(sql`date(${posts.publishedAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit).offset(offset);
+      result = await query.orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(limit).offset(offset);
     }
 
     // Get total count with same conditions

@@ -75,7 +75,7 @@ async function getSourcePosts(sourceName: string): Promise<PostCardData[]> {
     } else if (isNewsSource) {
       result = await query.orderBy(desc(posts.createdAt)).limit(300);
     } else {
-      result = await query.orderBy(sql`date(${posts.publishedAt}/1000, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(300);
+      result = await query.orderBy(sql`date(${posts.publishedAt}, 'unixepoch') DESC`, desc(posts.score), desc(posts.createdAt)).limit(300);
     }
 
     return result.map((row) => ({
