@@ -1,6 +1,10 @@
 // Buzzing Agent - Home Page (Server Component)
 
 import { db, posts, sources } from '@/db';
+
+// Revalidate page every 5 minutes (300 seconds)
+// This enables ISR - page is regenerated in background after this interval
+export const revalidate = 300;
 import { desc, eq, sql } from 'drizzle-orm';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SourceSection } from '@/components';
