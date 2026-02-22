@@ -59,10 +59,19 @@ export async function fetchRundown(options: { limit?: number } = {}): Promise<{ 
     for (const item of items) {
       if (!item.link || !item.title) continue;
       const externalId = generateExternalId(item.link);
+      const enclosure = item.enclosure as { url?: string; type?: string } | undefined;
+      const thumbnailUrl = enclosure?.url && enclosure.type?.startsWith('image/') ? enclosure.url : null;
+
       const existing = await db.query.posts.findFirst({
         where: and(eq(posts.sourceId, source.id), eq(posts.externalId, externalId)),
       });
-      if (existing) continue;
+      if (existing) {
+        // Update thumbnail if missing
+        if (thumbnailUrl && !existing.thumbnailUrl) {
+          await db.update(posts).set({ thumbnailUrl }).where(eq(posts.id, existing.id));
+        }
+        continue;
+      }
 
       const postData: NewPost = {
         sourceId: source.id,
@@ -75,6 +84,7 @@ export async function fetchRundown(options: { limit?: number } = {}): Promise<{ 
         sourceUrl: item.link,
         originUrl: item.link,
         sourceDomain: extractDomain(item.link),
+        thumbnailUrl,
         author: item.author || 'The Rundown AI',
         score: 0,
         tags: item.categories || [],
