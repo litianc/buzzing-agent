@@ -198,10 +198,9 @@ export default async function SourcePage({ params }: Props) {
 // Generate static params for all locales and sources
 export function generateStaticParams() {
   const locales = ['zh', 'en', 'ja'];
-  const sources = ['hn']; // Only HN is active for now
 
   return locales.flatMap((locale) =>
-    sources.map((source) => ({
+    validSources.map((source) => ({
       locale,
       source,
     }))
