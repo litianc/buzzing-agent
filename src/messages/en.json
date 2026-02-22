@@ -21,6 +21,7 @@
     "productHunt": "Product Hunt",
     "watcha": "Watcha",
     "baoyu": "Baoyu's Blog",
+    "rundown": "The Rundown AI",
     "more": "More",
     "showImages": "Show images",
     "hideImages": "Hide images",
@@ -59,7 +60,8 @@
     "devto": "Developer community sharing articles, tutorials and discussions",
     "ph": "The latest products and startups",
     "watcha": "AI product review community, discover the latest and hottest AI apps",
-    "baoyu": "Baoyu's blog sharing insights on LLMs, Prompt Engineering, and software development"
+    "baoyu": "Baoyu's blog sharing insights on LLMs, Prompt Engineering, and software development",
+    "rundown": "Daily AI news summary covering the latest developments in artificial intelligence"
   },
   "footer": {
     "tagline": "Browse global trending content",

@@ -12,13 +12,13 @@ import type { PostCardData } from '@/types';
 import type { Locale } from '@/i18n/routing';
 
 // Source order and titles (descriptions are in translation files)
-const sourceOrder = ['hn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn', 'baoyu'] as const;
+const sourceOrder = ['hn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn', 'baoyu', 'rundown'] as const;
 
 // News sources don't have scores, sort by crawl time
 const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
 
 // Blog sources don't have scores, sort by publish time
-const blogSources = ['baoyu'] as const;
+const blogSources = ['baoyu', 'rundown'] as const;
 
 const sourceTitles: Record<string, string> = {
   hn: 'Hacker News',
@@ -33,6 +33,7 @@ const sourceTitles: Record<string, string> = {
   ph: 'Product Hunt',
   watcha: '观猹',
   baoyu: '宝玉的分享',
+  rundown: 'The Rundown AI',
 };
 
 // Fetch posts for a single source (up to 300 for client-side pagination)

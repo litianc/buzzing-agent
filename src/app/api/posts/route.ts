@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;
 
 // Blog sources don't have scores, sort by publish time
-const blogSources = ['baoyu'] as const;
+const blogSources = ['baoyu', 'rundown'] as const;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

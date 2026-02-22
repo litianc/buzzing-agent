@@ -13,6 +13,7 @@ import { fetchGuardian } from '@/services/guardian';
 import { fetchNature } from '@/services/nature';
 import { fetchSkyNews } from '@/services/skynews';
 import { fetchArsTechnica } from '@/services/arstechnica';
+import { fetchRundown } from '@/services/rundown';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -50,6 +51,7 @@ export async function GET(request: Request) {
     { name: 'nature', fn: () => fetchNature({ limit: 20 }) },
     { name: 'skynews', fn: () => fetchSkyNews({ limit: 20 }) },
     { name: 'arstechnica', fn: () => fetchArsTechnica({ limit: 20 }) },
+    { name: 'rundown', fn: () => fetchRundown({ limit: 30 }) },
   ];
 
   // Execute all fetches in parallel

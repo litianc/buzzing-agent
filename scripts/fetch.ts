@@ -37,6 +37,7 @@ async function main() {
   const { fetchSkyNews } = await import('../src/services/skynews');
   const { fetchArsTechnica } = await import('../src/services/arstechnica');
   const { fetchBaoyu } = await import('../src/services/baoyu');
+  const { fetchRundown } = await import('../src/services/rundown');
   console.log('🚀 Starting fetch all sources...\n');
   const startTime = Date.now();
 
@@ -53,6 +54,7 @@ async function main() {
     { name: 'skynews', fn: () => fetchSkyNews({ limit: 20 }) },
     { name: 'arstechnica', fn: () => fetchArsTechnica({ limit: 20 }) },
     { name: 'baoyu', fn: () => fetchBaoyu({ limit: 30 }) },
+    { name: 'rundown', fn: () => fetchRundown({ limit: 30 }) },
   ];
 
   const results: FetchResult[] = [];
