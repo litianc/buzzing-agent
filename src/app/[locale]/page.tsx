@@ -12,7 +12,7 @@ import type { PostCardData } from '@/types';
 import type { Locale } from '@/i18n/routing';
 
 // Source order and titles (descriptions are in translation files)
-const sourceOrder = ['hn', 'lobsters', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn', 'baoyu', 'rundown'] as const;
+const sourceOrder = ['hn', 'lobsters', 'rundown', 'arstechnica', 'guardian', 'nature', 'skynews', 'devto', 'ph', 'watcha', 'showhn', 'askhn', 'baoyu'] as const;
 
 // News sources don't have scores, sort by crawl time
 const newsSources = ['guardian', 'nature', 'skynews', 'arstechnica'] as const;

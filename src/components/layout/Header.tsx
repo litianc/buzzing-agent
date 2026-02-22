@@ -22,6 +22,7 @@ export function Header() {
   const navItems: NavItem[] = [
     { href: '/hn', label: t('hackerNews') },
     { href: '/lobsters', label: t('lobsters') },
+    { href: '/rundown', label: t('rundown') },
     { href: '/arstechnica', label: t('arstechnica') },
     { href: '/guardian', label: t('guardian') },
     { href: '/nature', label: t('nature') },
@@ -30,7 +31,6 @@ export function Header() {
     { href: '/ph', label: t('productHunt') },
     { href: '/watcha', label: t('watcha') },
     { href: '/baoyu', label: t('baoyu') },
-    { href: '/rundown', label: t('rundown') },
     { href: '/showhn', label: t('showhn') },
     { href: '/askhn', label: t('askhn') },
   ];
