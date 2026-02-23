@@ -30,6 +30,7 @@ export function Header() {
     { href: '/devto', label: t('devto') },
     { href: '/ph', label: t('productHunt') },
     { href: '/watcha', label: t('watcha') },
+    { href: '/quesma', label: t('quesma') },
     { href: '/baoyu', label: t('baoyu') },
     { href: '/showhn', label: t('showhn') },
     { href: '/askhn', label: t('askhn') },

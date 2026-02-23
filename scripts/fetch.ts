@@ -38,6 +38,7 @@ async function main() {
   const { fetchArsTechnica } = await import('../src/services/arstechnica');
   const { fetchBaoyu } = await import('../src/services/baoyu');
   const { fetchRundown } = await import('../src/services/rundown');
+  const { fetchQuesma } = await import('../src/services/quesma');
   console.log('🚀 Starting fetch all sources...\n');
   const startTime = Date.now();
 
@@ -55,6 +56,7 @@ async function main() {
     { name: 'arstechnica', fn: () => fetchArsTechnica({ limit: 20 }) },
     { name: 'baoyu', fn: () => fetchBaoyu({ limit: 30 }) },
     { name: 'rundown', fn: () => fetchRundown({ limit: 30 }) },
+    { name: 'quesma', fn: () => fetchQuesma({ limit: 30 }) },
   ];
 
   const results: FetchResult[] = [];
